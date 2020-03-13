@@ -22,8 +22,9 @@
         </div>
     </div>
 
-    <div class="container train-schedule">
-        <div class="card">
+    <div class="container" id="train-schedule">
+
+        <div class="card" id="card 1">
             <div class="card-header">
                 Current Train Schedule
             </div>
@@ -45,6 +46,45 @@
         </div>
     </div>
 
+    <div class="container" id="add-train">
+
+
+        <div class="card" id="card 2">
+            <div class="card-header">
+                Add New Train
+            </div>
+
+            <div class="card-body">
+            <form>
+                <div class="form-group">
+                    <label for="Train-name">Train Name</label>
+                    <input type="text" class="form-control" name="name" id="train-name-input" placeholder="Train Name">
+                </div>
+
+                <div class="form-group">
+                    <label for="Destination">Destination</label>
+                    <input type="text" class="form-control" name="destination" id="destination-input" placeholder="Destination">
+                </div>
+                <div class="form-group">
+                    <label for="first-time">First Train Time (in Military Time) HH:MM </label>
+                    <input type="text" class="form-control" name="first-time" id="first-time-input"
+                        placeholder="23:00">
+                </div>
+                <div class="form-group">
+                    <label for="frequency">Frequency</label>
+                    <input type="text" class="form-control" name="frequency" id="frequency-input"
+                        placeholder="2500">
+                </div>
+                <div class="submit-button-div">
+                    <button class="btn btn-primary btn-lg" id="submit-info-btn">Submit</button>
+                </div>
+
+            </form>
+            </div>
+
+        </div>
+
+    </div>
 
     <script src="assets/java.js"></script>
 </body>
