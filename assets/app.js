@@ -18,9 +18,7 @@ var place = "";
 var time = "";
 var frequency = "";
 
-// Variables for times
-var next_arrival = "";
-var min_away = "";
+
 
 // Capture Button Click
 $("#submit").on("click", function (event) {
@@ -41,6 +39,14 @@ $("#submit").on("click", function (event) {
         first_time: time,
         frequency: frequency,
     });
+
+    $("#train-name-input").val("");
+
+    $("#destination-input").val("");
+
+    $("#first-time-input").val("");
+
+    $("#frequency-input").val("");
 });
 
 
