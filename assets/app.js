@@ -40,6 +40,7 @@ $("#submit").on("click", function (event) {
         frequency: frequency,
     });
 
+    //Reset Forms
     $("#train-name-input").val("");
 
     $("#destination-input").val("");
@@ -52,13 +53,13 @@ $("#submit").on("click", function (event) {
 
 database.ref().on("child_added", function (added) {
 
-    // First Time (pushed back 1 year to make sure it comes before current time)
+
     var firstTimeConverted = moment(added.val().first_time, "HH:mm").subtract(1, "years");
 
     // Difference between the first train and current time
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
 
-    // Time apart (remainder)
+    // Time apart
     var tRemainder = diffTime % added.val().frequency;
 
     // Minute Until Train
