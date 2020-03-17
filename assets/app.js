@@ -12,20 +12,6 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
-
-//Arrays diffe
-var train_names = ["Trenton Express", "Oregon Trial", "Midnight Camage", "Sing Sing Caravan",
-    "Boston Bus", "California Caravan", "Analben's Train"];
-
-var destinations = ["Trenton", "Salem, Oregon", "Philadelphia", "Atlanta", "Boston",
-    "San Francisco", "Florida"];
-
-var frequencies = [25, 3600, 15, 45, 65, 6000, 25];
-
-var next_train = [];
-
-var minutes_away = [];
-
 // Input variables: from the form
 var train = "";
 var place = "";
@@ -42,67 +28,48 @@ $("#submit").on("click", function (event) {
 
     // Grabbed values from text boxes
     train = $("#train-name-input").val().trim();
-    train_names.push(train);
 
     place = $("#destination-input").val().trim();
-    destinations.push(place);
 
     time = $("#first-time-input").val().trim();
 
     frequency = $("#frequency-input").val().trim();
-    frequencies.push(frequency);
 
     database.ref().push({
         train_name: train,
         destination: place,
         first_time: time,
         frequency: frequency,
-        dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
 });
 
-function InitializeFirebase(){
 
-    for(i=0;i<train_names.length;i++){
+database.ref().on("child_added", function (added) {
 
-        train = train_names[i];
-        place = destinations[i];
-        time = "";
-        frequency = frequencies[i];
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var firstTimeConverted = moment(added.val().first_time, "HH:mm").subtract(1, "years");
 
-        database.ref().push({
-            train_name: train,
-            destination: place,
-            first_time: time,
-            frequency: frequency,
-            dateAdded: firebase.database.ServerValue.TIMESTAMP
-        });
-       }
-}
+    // Difference between the first train and current time
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
 
-database.ref().on("child_added", function(added) {
+    // Time apart (remainder)
+    var tRemainder = diffTime % added.val().frequency;
 
+    // Minute Until Train
+    var tMinutesTillTrain = added.val().frequency - tRemainder;
 
-    console.log(added.val().train_name);
-    console.log(added.val().destination);
-    console.log(added.val().first_time);
-    console.log(added.val().frequency);
+    // Next Train
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes").format("HH:mm");
+
+    $("#train-list").append("<tr><td>" + added.val().train_name +
+        " </td><td>" + added.val().destination +
+        " </td><td> " + added.val().frequency +
+        " </td><td>" + nextTrain +
+        " </td><td> " + tMinutesTillTrain +
+        " </td></tr>");
 
 
-   
-    $("#train-list").append("<tr><td>" + added.val().train_name + 
-      " </td><td>" + added.val().destination +
-      " </td><td> " + added.val().frequency +
-      " </td><td>" + "" +
-      " </td><td> " + "" +
-      " </td><td>" + "" +
-      " </td></tr>");
-
- 
-  }, function(errorObject) {
+}, function (errorObject) {
     console.log("Errors handled: " + errorObject.code);
-  });
+});
 
-  InitializeFirebase();
-
-  
